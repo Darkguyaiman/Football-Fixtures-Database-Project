@@ -653,21 +653,6 @@ git push origin feature/amazing-feature
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-### MIT License Summary
-
-- ✅ **Commercial use** - Use in commercial projects
-- ✅ **Modification** - Modify and adapt the code
-- ✅ **Distribution** - Share and distribute freely
-- ✅ **Private use** - Use in private projects
-- ❗ **Liability** - No warranty provided
-- ❗ **Attribution** - Include original license
-
----
-
 ## 🙏 Acknowledgments
 
 <div align="center">
