@@ -1,79 +1,121 @@
 <div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1e3c72,100:2a5298&height=200&section=header&text=Football%20Fixtures%20Database&fontSize=40&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Comprehensive%20Sports%20Data%20Management%20Platform&descAlignY=55&descSize=18" width="100%"/>
+</div>
 
-# ⚽ Football Fixtures Database
+<div align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=2E86AB&center=true&vCenter=true&width=600&lines=Transform+your+football+data+management;Robust+%26+scalable+database+solution;Designed+for+modern+sports+analytics;Complete+foundation+for+football+apps" alt="Typing SVG" />
+</div>
 
-*A comprehensive, production-ready MySQL database system for managing football leagues, teams, players, and match data*
-
-[![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)](https://mysql.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Database](https://img.shields.io/badge/Tables-17+-orange.svg)](#database-schema)
-[![Views](https://img.shields.io/badge/Views-4-purple.svg)](#database-views)
-[![Procedures](https://img.shields.io/badge/Stored_Procedures-1-red.svg)](#stored-procedures)
+<p align="center">
+  <img src="https://img.shields.io/badge/MySQL-8.0+-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
+  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/badge/Tables-17+-FF6B6B.svg?style=for-the-badge" alt="Database"/>
+  <img src="https://img.shields.io/badge/Views-4-9B59B6.svg?style=for-the-badge" alt="Views"/>
+  <img src="https://img.shields.io/badge/Stored_Procedures-1-E74C3C.svg?style=for-the-badge" alt="Procedures"/>
+</p>
 
 ---
-
-*Transform your football data management with a robust, scalable database solution designed for modern sports analytics and applications.*
-
-</div>
 
 ## 🌟 Overview
 
 The **Football Fixtures Database** is a comprehensive MySQL database system designed to handle all aspects of football league management. From player contracts and medical records to match statistics and team performance analytics, this database provides a complete foundation for football-related applications.
 
-### ✨ Key Highlights
+<div align="center">
 
-- **🏗️ 17+ Interconnected Tables** - Complete relational structure
-- **📊 4 Pre-built Views** - Ready-to-use data perspectives  
-- **⚙️ Stored Procedures** - Automated statistics updates
-- **🔍 Advanced Indexing** - Optimized for performance
-- **🌍 Multi-League Support** - Handle multiple competitions
-- **📈 Real-time Statistics** - Live match and player tracking
-- **🏥 Medical Tracking** - Comprehensive injury management
-- **💼 Contract Management** - Player contract lifecycle
+| Feature | Description | Status |
+|---------|-------------|--------|
+| **Database Tables** | 17+ Interconnected Tables | ✅ Complete |
+| **Data Views** | 4 Pre-built Views | ✅ Complete |
+| **Automation** | Stored Procedures | ✅ Complete |
+| **Performance** | Advanced Indexing | ✅ Optimized |
+| **Multi-League** | Competition Support | ✅ Ready |
+| **Real-time** | Live Statistics | ✅ Active |
+| **Medical** | Injury Management | ✅ Comprehensive |
+| **Contracts** | Player Management | ✅ Full Lifecycle |
+
+</div>
 
 ---
 
 ## 🚀 Quick Start
 
-### Prerequisites
+<details>
+<summary><b>📋 Prerequisites</b></summary>
 
 - MySQL 8.0 or higher
 - Database administration tool (MySQL Workbench, phpMyAdmin, etc.)
 - Sufficient storage space (recommended: 1GB+ for production data)
 
-### Installation
+</details>
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/football-fixtures-database.git
-   cd football-fixtures-database
-   ```
+<details>
+<summary><b>⚡ Installation Steps</b></summary>
 
-2. **Create the database schema**
-   ```bash
-   mysql -u your_username -p < Football_Fixtures_Database_Creation_Script.sql
-   ```
+**1. Clone the repository**
+```bash
+git clone https://github.com/yourusername/football-fixtures-database.git
+cd football-fixtures-database
+```
 
-3. **Populate with sample data**
-   ```bash
-   mysql -u your_username -p < football-fixtures-db-population-script.sql
-   ```
+**2. Create the database schema**
+```bash
+mysql -u your_username -p < Football_Fixtures_Database_Creation_Script.sql
+```
 
-4. **Verify installation**
-   ```sql
-   USE football_fixtures_db;
-   SHOW TABLES;
-   SELECT COUNT(*) FROM fixtures;
-   ```
+**3. Populate with sample data**
+```bash
+mysql -u your_username -p < football-fixtures-db-population-script.sql
+```
+
+**4. Verify installation**
+```sql
+USE football_fixtures_db;
+SHOW TABLES;
+SELECT COUNT(*) FROM fixtures;
+```
+
+</details>
 
 ---
 
-## 🏗️ Database Schema
+## 🏗️ Database Architecture
+
+<div align="center">
+
+```mermaid
+graph TB
+    A[Competitions] --> B[Fixtures]
+    C[Teams] --> B
+    D[Stadiums] --> B
+    E[Referees] --> B
+    
+    C --> F[Players]
+    G[Coaches] --> C
+    H[Positions] --> F
+    I[Player Statuses] --> F
+    
+    B --> J[Match Results]
+    B --> K[Goals]
+    B --> L[Cards]
+    B --> M[Match Events]
+    
+    F --> K
+    F --> N[Player Statistics]
+    F --> O[Player Contracts]
+    F --> P[Medical Records]
+    
+    C --> Q[Team Statistics]
+    C --> R[Team Staff]
+    
+    K --> S[Assists]
+```
+
+</div>
 
 ### Core Tables Structure
 
 <details>
-<summary><strong>🏆 Competition Management</strong></summary>
+<summary><b>🏆 Competition Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -83,7 +125,7 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 </details>
 
 <details>
-<summary><strong>🏟️ Infrastructure</strong></summary>
+<summary><b>🏟️ Infrastructure</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -93,7 +135,7 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 </details>
 
 <details>
-<summary><strong>👥 Personnel Management</strong></summary>
+<summary><b>👥 Personnel Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -105,7 +147,7 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 </details>
 
 <details>
-<summary><strong>⚽ Match Management</strong></summary>
+<summary><b>⚽ Match Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -119,7 +161,7 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 </details>
 
 <details>
-<summary><strong>📊 Analytics & Performance</strong></summary>
+<summary><b>📊 Analytics & Performance</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -129,7 +171,7 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 </details>
 
 <details>
-<summary><strong>💼 Business Management</strong></summary>
+<summary><b>💼 Business Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -140,68 +182,104 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 
 ### 🔗 Relationship Highlights
 
-- **Foreign Key Constraints** ensure data integrity
-- **Cascading Updates** maintain consistency
-- **Optimized Indexes** for fast queries
-- **ENUM Types** for standardized values
+<div align="center">
+
+| Feature | Implementation | Benefit |
+|---------|---------------|---------|
+| **Foreign Key Constraints** | Ensure data integrity | Prevents orphaned records |
+| **Cascading Updates** | Maintain consistency | Automatic relationship updates |
+| **Optimized Indexes** | Fast query performance | Sub-second response times |
+| **ENUM Types** | Standardized values | Data validation & consistency |
+
+</div>
 
 ---
 
 ## 📊 Database Views
 
-Pre-built views for common queries:
+<div align="center">
 
-### 🏆 League Table
+### Pre-built Views for Common Queries
+
+</div>
+
+<table align="center">
+<tr>
+<td>
+
+**🏆 League Table**
 ```sql
 SELECT * FROM league_table 
 WHERE competition_id = 1 
 ORDER BY position;
 ```
 
-### ⚽ Top Scorers
+</td>
+<td>
+
+**⚽ Top Scorers**
 ```sql
 SELECT * FROM top_scorers 
 ORDER BY goals_scored DESC 
 LIMIT 10;
 ```
 
-### 📅 Upcoming Fixtures
+</td>
+</tr>
+<tr>
+<td>
+
+**📅 Upcoming Fixtures**
 ```sql
 SELECT * FROM upcoming_fixtures 
-WHERE match_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);
+WHERE match_date BETWEEN 
+CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);
 ```
 
-### 📈 Player Performance
+</td>
+<td>
+
+**📈 Player Performance**
 ```sql
 SELECT * FROM player_performance 
 WHERE team_name = 'Manchester United'
 ORDER BY goals_scored DESC;
 ```
 
+</td>
+</tr>
+</table>
+
 ---
 
 ## ⚙️ Stored Procedures
 
+<div align="center">
+
 ### UpdateTeamStatistics
-Automatically updates team statistics after match completion:
+*Automatically updates team statistics after match completion*
+
+</div>
 
 ```sql
 CALL UpdateTeamStatistics(fixture_id);
 ```
 
-**Features:**
-- Calculates points based on match result
-- Updates goal difference
-- Maintains win/draw/loss records
-- Handles both home and away team statistics
+**Automated Features:**
+- ✅ Calculates points based on match result
+- ✅ Updates goal difference
+- ✅ Maintains win/draw/loss records
+- ✅ Handles both home and away team statistics
 
 ---
 
 ## 💡 Usage Examples
 
-### 🔍 Common Queries
+### 🔍 Advanced Query Examples
 
-**Get next 5 Premier League matches:**
+<details>
+<summary><b>Get next 5 Premier League matches</b></summary>
+
 ```sql
 SELECT 
     f.match_date,
@@ -221,7 +299,11 @@ ORDER BY f.match_date, f.kick_off_time
 LIMIT 5;
 ```
 
-**Player goal statistics:**
+</details>
+
+<details>
+<summary><b>Player goal statistics analysis</b></summary>
+
 ```sql
 SELECT 
     CONCAT(p.first_name, ' ', p.last_name) AS player_name,
@@ -237,7 +319,11 @@ HAVING total_goals > 0
 ORDER BY total_goals DESC;
 ```
 
-**Team form analysis:**
+</details>
+
+<details>
+<summary><b>Team form analysis</b></summary>
+
 ```sql
 SELECT 
     t.team_name,
@@ -252,101 +338,384 @@ WHERE ts.season = '2024-25' AND ts.competition_id = 1
 ORDER BY win_percentage DESC;
 ```
 
+</details>
+
+<details>
+<summary><b>Player injury history report</b></summary>
+
+```sql
+SELECT 
+    CONCAT(p.first_name, ' ', p.last_name) AS player_name,
+    t.team_name,
+    mr.injury_type,
+    mr.injury_date,
+    mr.expected_return_date,
+    mr.severity,
+    DATEDIFF(COALESCE(mr.actual_return_date, CURDATE()), mr.injury_date) AS days_out
+FROM medical_records mr
+JOIN players p ON mr.player_id = p.player_id
+JOIN teams t ON p.team_id = t.team_id
+WHERE mr.injury_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+ORDER BY mr.injury_date DESC;
+```
+
+</details>
+
+<details>
+<summary><b>Stadium utilization analysis</b></summary>
+
+```sql
+SELECT 
+    s.stadium_name,
+    s.capacity,
+    COUNT(f.fixture_id) AS matches_hosted,
+    AVG(f.attendance) AS avg_attendance,
+    ROUND((AVG(f.attendance) / s.capacity) * 100, 1) AS capacity_utilization_percent
+FROM stadiums s
+LEFT JOIN fixtures f ON s.stadium_id = f.stadium_id
+WHERE f.status = 'Finished'
+GROUP BY s.stadium_id, s.stadium_name, s.capacity
+ORDER BY capacity_utilization_percent DESC;
+```
+
+</details>
+
 ---
 
-## 🎯 Features
+## 🎯 Technical Features
 
-### 🔧 Technical Features
-- **UTF8MB4 Character Set** - Full Unicode support
-- **InnoDB Engine** - ACID compliance and foreign keys
-- **Optimized Indexes** - Fast query performance
-- **Data Validation** - ENUM constraints and checks
-- **Audit Trails** - Created/updated timestamps
+<div align="center">
 
-### 📊 Functional Features
-- **Multi-Competition Support** - Handle various leagues/tournaments
-- **Real-time Match Tracking** - Live score updates
-- **Player Career Management** - Complete player lifecycle
-- **Medical Record Keeping** - Injury tracking and recovery
-- **Contract Management** - Financial and legal tracking
-- **Statistical Analysis** - Comprehensive performance metrics
+<table>
+<tr>
+<th>🔧 Technical</th>
+<th>📊 Functional</th>
+<th>🔒 Security</th>
+</tr>
+<tr>
+<td>
 
-### 🔒 Security Features
-- **Foreign Key Constraints** - Data integrity
-- **Input Validation** - Prevent invalid data
-- **Role-based Access** - Configurable permissions
-- **Backup-friendly** - Easy data export/import
+- **UTF8MB4 Character Set**
+- **InnoDB Engine**
+- **Optimized Indexes**
+- **Data Validation**
+- **Audit Trails**
+- **Stored Procedures**
+- **Database Views**
+
+</td>
+<td>
+
+- **Multi-Competition Support**
+- **Real-time Match Tracking**
+- **Player Career Management**
+- **Medical Record Keeping**
+- **Contract Management**
+- **Statistical Analysis**
+- **Performance Metrics**
+
+</td>
+<td>
+
+- **Foreign Key Constraints**
+- **Input Validation**
+- **Role-based Access**
+- **Backup-friendly**
+- **Data Integrity**
+- **Transaction Safety**
+- **Referential Integrity**
+
+</td>
+</tr>
+</table>
+
+</div>
 
 ---
 
-## 📈 Sample Data Included
+## 📈 Sample Data Overview
 
-The database comes pre-populated with realistic sample data:
+<div align="center">
 
-- **🏟️ 15 Premier League Stadiums** - Including capacity and surface type
-- **👨‍💼 15 Professional Coaches** - With qualifications and nationalities  
-- **⚽ 31 Professional Players** - Across multiple teams with detailed profiles
-- **🏆 5 Major Competitions** - Premier League, Championship, FA Cup, Champions League, Europa League
-- **📅 18+ Match Fixtures** - Mix of completed and scheduled matches
-- **📊 Complete Statistics** - Goals, assists, cards, and performance data
-- **💼 Contract Information** - Salary and contract duration data
-- **🏥 Medical Records** - Injury tracking examples
+**The database comes pre-populated with comprehensive sample data:**
+
+</div>
+
+<table align="center">
+<tr>
+<td align="center">
+
+**🏟️ Infrastructure**
+- **15** Premier League Stadiums
+- Capacity & surface details
+- Geographic locations
+- Venue specifications
+
+</td>
+<td align="center">
+
+**👨‍💼 Personnel**
+- **15** Professional Coaches
+- **31** Professional Players
+- Qualifications & profiles
+- Career statistics
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+**🏆 Competitions**
+- **5** Major Competitions
+- Premier League focus
+- European tournaments
+- Multi-season support
+
+</td>
+<td align="center">
+
+**📊 Match Data**
+- **18+** Match Fixtures
+- Complete statistics
+- Goals, assists, cards
+- Match events timeline
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+**💼 Business Data**
+- Contract information
+- Salary structures
+- Transfer details
+- Financial tracking
+
+</td>
+<td align="center">
+
+**🏥 Medical Records**
+- Injury tracking
+- Recovery timelines
+- Treatment notes
+- Medical staff records
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 🛠️ Customization
+## 🛠️ Customization & Extension
 
 ### Adding New Competitions
+
 ```sql
 INSERT INTO competitions (competition_name, sponsor, season, country) 
 VALUES ('La Liga', 'Santander', '2024-25', 'Spain');
 ```
 
 ### Extending Player Attributes
-The flexible schema allows easy addition of new player attributes:
-- Performance metrics
-- Physical measurements  
-- Social media handles
-- Market valuations
 
-### Custom Views
-Create specialized views for your specific needs:
+The flexible schema allows easy addition of new player attributes:
+
 ```sql
+-- Add new columns to players table
+ALTER TABLE players 
+ADD COLUMN market_value DECIMAL(12,2),
+ADD COLUMN social_media_handle VARCHAR(100),
+ADD COLUMN agent_name VARCHAR(100);
+```
+
+### Custom Views for Specific Needs
+
+```sql
+-- Team discipline analysis
 CREATE VIEW team_discipline AS
 SELECT 
     t.team_name,
     COUNT(CASE WHEN c.card_type = 'Yellow' THEN 1 END) AS yellow_cards,
-    COUNT(CASE WHEN c.card_type = 'Red' THEN 1 END) AS red_cards
+    COUNT(CASE WHEN c.card_type = 'Red' THEN 1 END) AS red_cards,
+    ROUND(COUNT(c.card_id) / COUNT(DISTINCT f.fixture_id), 2) AS cards_per_match
 FROM teams t
 LEFT JOIN players p ON t.team_id = p.team_id
 LEFT JOIN cards c ON p.player_id = c.player_id
+LEFT JOIN fixtures f ON c.fixture_id = f.fixture_id
 GROUP BY t.team_id, t.team_name;
+
+-- Player value analysis
+CREATE VIEW player_market_analysis AS
+SELECT 
+    CONCAT(p.first_name, ' ', p.last_name) AS player_name,
+    t.team_name,
+    pos.position_name,
+    ps.goals_scored,
+    ps.assists,
+    pc.weekly_salary * 52 AS annual_salary,
+    TIMESTAMPDIFF(YEAR, p.date_of_birth, CURDATE()) AS age
+FROM players p
+JOIN teams t ON p.team_id = t.team_id
+JOIN positions pos ON p.position_id = pos.position_id
+LEFT JOIN player_statistics ps ON p.player_id = ps.player_id
+LEFT JOIN player_contracts pc ON p.player_id = pc.player_id AND pc.is_active = TRUE
+WHERE ps.season = '2024-25';
+```
+
+### Performance Optimization Tips
+
+```sql
+-- Add custom indexes for frequently queried columns
+CREATE INDEX idx_fixtures_date_status ON fixtures(match_date, status);
+CREATE INDEX idx_goals_player_season ON goals(player_id, fixture_id);
+CREATE INDEX idx_player_stats_season_goals ON player_statistics(season, goals_scored DESC);
+
+-- Analyze table performance
+ANALYZE TABLE fixtures, players, goals, player_statistics;
+
+-- Check query execution plans
+EXPLAIN SELECT * FROM fixtures WHERE match_date >= CURDATE();
 ```
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how you can help:
+<div align="center">
 
-1. **🐛 Report Issues** - Found a bug? Let us know!
-2. **💡 Suggest Features** - Have ideas for improvements?
-3. **📝 Improve Documentation** - Help make our docs better
-4. **🔧 Submit Code** - Fork, develop, and create pull requests
+**We welcome contributions! Here's how you can help:**
 
-### Development Setup
+</div>
+
+<table align="center">
+<tr>
+<td align="center">
+
+**🐛 Report Issues**
+Found a bug? Let us know!
+Create detailed issue reports
+
+</td>
+<td align="center">
+
+**💡 Suggest Features**
+Have ideas for improvements?
+Share your enhancement proposals
+
+</td>
+<td align="center">
+
+**📝 Improve Documentation**
+Help make our docs better
+Add examples and tutorials
+
+</td>
+<td align="center">
+
+**🔧 Submit Code**
+Fork, develop, and create PRs
+Follow coding standards
+
+</td>
+</tr>
+</table>
+
+### Development Workflow
+
 ```bash
-# Fork the repository
+# 1. Fork and clone the repository
 git clone https://github.com/yourusername/football-fixtures-database.git
+cd football-fixtures-database
 
-# Create feature branch
+# 2. Create a feature branch
 git checkout -b feature/amazing-feature
 
-# Make changes and test
+# 3. Make your changes and test thoroughly
 mysql -u root -p < your-changes.sql
 
-# Commit and push
-git commit -m "Add amazing feature"
+# 4. Run validation tests
+mysql -u root -p football_fixtures_db < tests/validation_tests.sql
+
+# 5. Commit with clear, descriptive messages
+git add .
+git commit -m "feat: add player transfer tracking functionality"
+
+# 6. Push and create pull request
 git push origin feature/amazing-feature
 ```
 
+### Code Standards
+
+- **SQL Style**: Use uppercase for keywords, lowercase for identifiers
+- **Naming**: Use descriptive names with consistent conventions
+- **Comments**: Document complex queries and business logic
+- **Testing**: Include test data and validation queries
+- **Documentation**: Update README for new features
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+- ✅ **Commercial use** - Use in commercial projects
+- ✅ **Modification** - Modify and adapt the code
+- ✅ **Distribution** - Share and distribute freely
+- ✅ **Private use** - Use in private projects
+- ❗ **Liability** - No warranty provided
+- ❗ **Attribution** - Include original license
+
+---
+
+## 🙏 Acknowledgments
+
+<div align="center">
+
+**Built with ❤️ for the football community**
+
+</div>
+
+<table align="center">
+<tr>
+<td align="center">
+
+**🛢️ MySQL Team**
+For the robust database engine
+and excellent documentation
+
+</td>
+<td align="center">
+
+**⚽ Football Community**
+For inspiration, requirements,
+and real-world use cases
+
+</td>
+<td align="center">
+
+**👥 Contributors**
+Everyone who helped improve
+this project with code and ideas
+
+</td>
+<td align="center">
+
+**🌐 Open Source**
+Standing on the shoulders of giants
+in the open source ecosystem
+
+</td>
+</tr>
+</table>
+
+---
+
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1e3c72,100:2a5298&height=100&section=footer" width="100%"/>
+</div>
+
+<div align="center">
+
+**⭐ Star this repository if you find it useful!**
+</div>
