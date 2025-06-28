@@ -8,7 +8,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/MySQL-8.0+-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL"/>
-  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License"/>
   <img src="https://img.shields.io/badge/Tables-17+-FF6B6B.svg?style=for-the-badge" alt="Database"/>
   <img src="https://img.shields.io/badge/Views-4-9B59B6.svg?style=for-the-badge" alt="Views"/>
   <img src="https://img.shields.io/badge/Stored_Procedures-1-E74C3C.svg?style=for-the-badge" alt="Procedures"/>
