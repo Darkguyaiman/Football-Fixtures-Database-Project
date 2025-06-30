@@ -208,9 +208,23 @@ graph TB
 
 **🏆 League Table**
 ```sql
-SELECT * FROM league_table 
-WHERE competition_id = 1 
-ORDER BY position;
+USE `football_fixtures_db`;
+
+SELECT 
+    t.team_name,
+    ts.matches_played,
+    ts.wins,
+    ts.draws,
+    ts.losses,
+    ts.goals_for,
+    ts.goals_against,
+    ts.goal_difference,
+    ts.points,
+    RANK() OVER (PARTITION BY ts.competition_id ORDER BY ts.points DESC, ts.goal_difference DESC, ts.goals_for DESC) as position
+FROM `team_statistics` ts
+JOIN `teams` t ON ts.team_id = t.team_id
+JOIN `competitions` c ON ts.competition_id = c.competition_id
+WHERE ts.season = '2024-25';
 ```
 
 </td>
@@ -218,9 +232,20 @@ ORDER BY position;
 
 **⚽ Top Scorers**
 ```sql
-SELECT * FROM top_scorers 
-ORDER BY goals_scored DESC 
-LIMIT 10;
+USE `football_fixtures_db`;
+
+SELECT 
+    CONCAT(p.first_name, ' ', p.last_name) as player_name,
+    t.team_name,
+    ps.goals_scored,
+    ps.assists,
+    ps.matches_played,
+    ROUND(ps.goals_scored / NULLIF(ps.matches_played, 0), 2) as goals_per_match
+FROM `player_statistics` ps
+JOIN `players` p ON ps.player_id = p.player_id
+JOIN `teams` t ON p.team_id = t.team_id
+WHERE ps.season = '2024-25'
+ORDER BY ps.goals_scored DESC, ps.assists DESC;
 ```
 
 </td>
@@ -230,9 +255,25 @@ LIMIT 10;
 
 **📅 Upcoming Fixtures**
 ```sql
-SELECT * FROM upcoming_fixtures 
-WHERE match_date BETWEEN 
-CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);
+USE `football_fixtures_db`;
+
+SELECT 
+    f.fixture_id,
+    f.match_date,
+    f.kick_off_time,
+    ht.team_name as home_team,
+    at.team_name as away_team,
+    c.competition_name,
+    s.stadium_name,
+    CONCAT(r.first_name, ' ', r.last_name) as referee_name
+FROM `fixtures` f
+JOIN `teams` ht ON f.home_team_id = ht.team_id
+JOIN `teams` at ON f.away_team_id = at.team_id
+JOIN `competitions` c ON f.competition_id = c.competition_id
+JOIN `stadiums` s ON f.stadium_id = s.stadium_id
+LEFT JOIN `referees` r ON f.referee_id = r.referee_id
+WHERE f.match_date >= CURDATE() AND f.status = 'Scheduled'
+ORDER BY f.match_date, f.kick_off_time;
 ```
 
 </td>
@@ -240,9 +281,24 @@ CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);
 
 **📈 Player Performance**
 ```sql
-SELECT * FROM player_performance 
-WHERE team_name = 'Manchester United'
-ORDER BY goals_scored DESC;
+USE `football_fixtures_db`;
+
+SELECT 
+    CONCAT(p.first_name, ' ', p.last_name) as player_name,
+    t.team_name,
+    pos.position_name,
+    ps.matches_played,
+    ps.goals_scored,
+    ps.assists,
+    ps.yellow_cards,
+    ps.red_cards,
+    ROUND(ps.minutes_played / NULLIF(ps.matches_played, 0), 0) as avg_minutes_per_match,
+    ps.pass_accuracy
+FROM `player_statistics` ps
+JOIN `players` p ON ps.player_id = p.player_id
+JOIN `teams` t ON p.team_id = t.team_id
+JOIN `positions` pos ON p.position_id = pos.position_id
+WHERE ps.season = '2024-25' AND ps.matches_played > 0;
 ```
 
 </td>
