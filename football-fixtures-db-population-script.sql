@@ -2,25 +2,6 @@ USE `football_fixtures_db`;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Clear any existing data to start fresh and avoid overlapping data.
-TRUNCATE TABLE `team_staff`;
-TRUNCATE TABLE `medical_records`;
-TRUNCATE TABLE `player_contracts`;
-TRUNCATE TABLE `player_fixture_stats`;
-TRUNCATE TABLE `team_statistics`;
-TRUNCATE TABLE `player_statistics`;
-TRUNCATE TABLE `match_events`;
-TRUNCATE TABLE `cards`;
-TRUNCATE TABLE `assists`;
-TRUNCATE TABLE `goals`;
-TRUNCATE TABLE `match_results`;
-TRUNCATE TABLE `fixtures`;
-TRUNCATE TABLE `players`;
-TRUNCATE TABLE `teams`;
-TRUNCATE TABLE `referees`;
-TRUNCATE TABLE `coaches`;
-TRUNCATE TABLE `stadiums`;
-
 -- Insert Stadiums data
 INSERT INTO `stadiums` (`stadium_name`, `location`, `city`, `country`, `capacity`, `surface_type`) VALUES
 ('Old Trafford', 'Sir Matt Busby Way', 'Manchester', 'England', 74879, 'Grass'),
