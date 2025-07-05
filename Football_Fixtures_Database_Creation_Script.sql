@@ -2,7 +2,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
--- Create database with proper character set and collation
+-- Creating database with proper character set and collation
 DROP DATABASE IF EXISTS `football_fixtures_db`;
 CREATE DATABASE `football_fixtures_db` 
     DEFAULT CHARACTER SET utf8mb4 
@@ -417,6 +417,8 @@ CREATE TABLE `team_staff` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- Insert initially needed data to make the database ready for data population later
+
 -- Insert Player Positions
 INSERT INTO `positions` (`position_name`, `position_code`, `position_category`) VALUES
 ('Goalkeeper', 'GK', 'Goalkeeper'),
@@ -453,77 +455,133 @@ INSERT INTO `competitions` (`competition_name`, `sponsor`, `season`, `country`) 
 ('UEFA Europa League', 'Just Eat', '2024-25', 'Europe');
 
 
--- League Table View
-CREATE VIEW `league_table` AS
-SELECT 
-    t.team_name,
-    ts.matches_played,
-    ts.wins,
-    ts.draws,
-    ts.losses,
-    ts.goals_for,
-    ts.goals_against,
-    ts.goal_difference,
-    ts.points,
-    RANK() OVER (PARTITION BY ts.competition_id ORDER BY ts.points DESC, ts.goal_difference DESC, ts.goals_for DESC) as position
-FROM `team_statistics` ts
-JOIN `teams` t ON ts.team_id = t.team_id
-JOIN `competitions` c ON ts.competition_id = c.competition_id
-WHERE ts.season = '2024-25';
-
--- Top Scorers View
-CREATE VIEW `top_scorers` AS
-SELECT 
-    CONCAT(p.first_name, ' ', p.last_name) as player_name,
-    t.team_name,
-    ps.goals_scored,
-    ps.assists,
-    ps.matches_played,
-    ROUND(ps.goals_scored / NULLIF(ps.matches_played, 0), 2) as goals_per_match
-FROM `player_statistics` ps
-JOIN `players` p ON ps.player_id = p.player_id
-JOIN `teams` t ON p.team_id = t.team_id
-WHERE ps.season = '2024-25'
-ORDER BY ps.goals_scored DESC, ps.assists DESC;
-
--- Upcoming Fixtures View
-CREATE VIEW `upcoming_fixtures` AS
-SELECT 
+-- Match Setup View
+CREATE VIEW view_match_setup AS
+SELECT
     f.fixture_id,
     f.match_date,
     f.kick_off_time,
-    ht.team_name as home_team,
-    at.team_name as away_team,
+    f.match_week,
+    f.status,
+    f.attendance,
+    f.weather_conditions,
     c.competition_name,
     s.stadium_name,
-    CONCAT(r.first_name, ' ', r.last_name) as referee_name
-FROM `fixtures` f
-JOIN `teams` ht ON f.home_team_id = ht.team_id
-JOIN `teams` at ON f.away_team_id = at.team_id
-JOIN `competitions` c ON f.competition_id = c.competition_id
-JOIN `stadiums` s ON f.stadium_id = s.stadium_id
-LEFT JOIN `referees` r ON f.referee_id = r.referee_id
-WHERE f.match_date >= CURDATE() AND f.status = 'Scheduled'
-ORDER BY f.match_date, f.kick_off_time;
+    s.city AS stadium_city,
+    s.country AS stadium_country,
+    CONCAT(r.first_name, ' ', r.last_name) AS referee_name,
+    r.nationality AS referee_nationality
+FROM fixtures f
+JOIN competitions c ON f.competition_id = c.competition_id
+JOIN stadiums s ON f.stadium_id = s.stadium_id
+LEFT JOIN referees r ON f.referee_id = r.referee_id;
 
--- Player Performance View
-CREATE VIEW `player_performance` AS
-SELECT 
-    CONCAT(p.first_name, ' ', p.last_name) as player_name,
-    t.team_name,
+
+-- Player Management View
+CREATE VIEW view_player_profiles AS
+SELECT
+    p.player_id,
+    CONCAT(p.first_name, ' ', p.last_name) AS full_name,
+    p.date_of_birth,
+    p.nationality,
+    p.squad_number,
     pos.position_name,
-    ps.matches_played,
-    ps.goals_scored,
-    ps.assists,
-    ps.yellow_cards,
-    ps.red_cards,
-    ROUND(ps.minutes_played / NULLIF(ps.matches_played, 0), 0) as avg_minutes_per_match,
-    ps.pass_accuracy
-FROM `player_statistics` ps
-JOIN `players` p ON ps.player_id = p.player_id
-JOIN `teams` t ON p.team_id = t.team_id
-JOIN `positions` pos ON p.position_id = pos.position_id
-WHERE ps.season = '2024-25' AND ps.matches_played > 0;
+    pos.position_code,
+    pos.position_category,
+    s.status_name,
+    s.status_description
+FROM players p
+JOIN positions pos ON p.position_id = pos.position_id
+JOIN player_statuses s ON p.status_id = s.status_id;
+
+
+-- Match Events Tracking View
+CREATE VIEW view_match_events AS
+SELECT
+    g.goal_id,
+    g.fixture_id,
+    'Goal' AS event_type,
+    g.player_id,
+    g.team_id,
+    g.minute,
+    g.added_time,
+    g.goal_type,
+    g.body_part,
+    g.is_own_goal
+FROM goals g
+
+UNION ALL
+
+SELECT
+    a.assist_id,
+    g.fixture_id,
+    'Assist' AS event_type,
+    a.player_id,
+    NULL AS team_id,
+    NULL AS minute,
+    NULL AS added_time,
+    a.assist_type,
+    NULL AS body_part,
+    NULL AS is_own_goal
+FROM assists a
+JOIN goals g ON a.goal_id = g.goal_id
+
+UNION ALL
+
+SELECT
+    c.card_id,
+    c.fixture_id,
+    'Card' AS event_type,
+    c.player_id,
+    c.team_id,
+    c.minute,
+    c.added_time,
+    c.card_type,
+    NULL AS body_part,
+    NULL AS is_own_goal
+FROM cards c
+
+UNION ALL
+
+SELECT
+    e.event_id,
+    e.fixture_id,
+    'Match Event' AS event_type,
+    e.player_id,
+    e.team_id,
+    e.minute,
+    e.added_time,
+    e.event_type,
+    NULL AS body_part,
+    NULL AS is_own_goal
+FROM match_events e;
+
+
+-- Club and Staff Management View
+CREATE VIEW view_club_structure AS
+SELECT
+    t.team_id,
+    t.team_name,
+    t.founded_year,
+    CONCAT(c.first_name, ' ', c.last_name) AS coach_name,
+    c.nationality AS coach_nationality,
+    ts.first_name AS staff_first_name,
+    ts.last_name AS staff_last_name,
+    ts.role AS staff_role,
+    ts.department AS staff_department,
+    ts.hire_date,
+    pc.contract_id,
+    pc.player_id,
+    pc.start_date,
+    pc.end_date,
+    pc.weekly_salary,
+    pc.signing_bonus,
+    pc.contract_type
+FROM teams t
+LEFT JOIN coaches c ON t.coach_id = c.coach_id
+LEFT JOIN team_staff ts ON t.team_id = ts.team_id
+LEFT JOIN player_contracts pc ON t.team_id = pc.team_id;
+
 
 -- =====================================================
 -- Stored Procedures for Common Operations
@@ -604,17 +662,13 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
--- Show all created tables
 SHOW TABLES;
 
--- Verify reference data was inserted
+-- Verifying that initial data that we need was inserted
 SELECT 'Positions' as table_name, COUNT(*) as record_count FROM positions
 UNION ALL
 SELECT 'Player Statuses', COUNT(*) FROM player_statuses
 UNION ALL
 SELECT 'Competitions', COUNT(*) FROM competitions;
 
--- Show table structure for key tables
-DESCRIBE fixtures;
-DESCRIBE players;
-DESCRIBE teams;
+SELECT 'Football Fixtures Database has been created successfully' AS status_message;
