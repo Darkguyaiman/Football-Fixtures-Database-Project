@@ -15,7 +15,7 @@
 
 ---
 
-## 🌟 Overview
+## Overview
 
 The **Football Fixtures Database** is a comprehensive MySQL database system designed to handle all aspects of football league management. From player contracts and medical records to match statistics and team performance analytics, this database provides a complete foundation for football-related applications.
 
@@ -23,23 +23,23 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| **Database Tables** | 17+ Interconnected Tables | ✅ Complete |
-| **Data Views** | 4 Pre-built Views | ✅ Complete |
-| **Automation** | Stored Procedures | ✅ Complete |
-| **Performance** | Advanced Indexing | ✅ Optimized |
-| **Multi-League** | Competition Support | ✅ Ready |
-| **Real-time** | Live Statistics | ✅ Active |
-| **Medical** | Injury Management | ✅ Comprehensive |
-| **Contracts** | Player Management | ✅ Full Lifecycle |
+| **Database Tables** | 20 Interconnected Tables | Complete |
+| **Data Views** | 4 Pre-built Views | Complete |
+| **Automation** | Stored Procedures | Complete |
+| **Performance** | Advanced Indexing | Optimized |
+| **Multi-League** | Competition Support | Ready |
+| **Real-time** | Live Statistics | Active |
+| **Medical** | Injury Management | Comprehensive |
+| **Contracts** | Player Management | Full Lifecycle |
 
 </div>
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 <details>
-<summary><b>📋 Prerequisites</b></summary>
+<summary><b>Prerequisites</b></summary>
 
 - MySQL 8.0 or higher
 - Database administration tool (MySQL Workbench, phpMyAdmin, etc.)
@@ -48,7 +48,7 @@ The **Football Fixtures Database** is a comprehensive MySQL database system desi
 </details>
 
 <details>
-<summary><b>⚡ Installation Steps</b></summary>
+<summary><b>Installation Steps</b></summary>
 
 **1. Clone the repository**
 ```bash
@@ -77,7 +77,7 @@ SELECT COUNT(*) FROM fixtures;
 
 ---
 
-## 🏗️ Database Architecture
+## Database Architecture
 
 <div align="center">
 
@@ -114,7 +114,7 @@ graph TB
 ### Core Tables Structure
 
 <details>
-<summary><b>🏆 Competition Management</b></summary>
+<summary><b>Competition Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -124,7 +124,7 @@ graph TB
 </details>
 
 <details>
-<summary><b>🏟️ Infrastructure</b></summary>
+<summary><b>Infrastructure</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -134,7 +134,7 @@ graph TB
 </details>
 
 <details>
-<summary><b>👥 Personnel Management</b></summary>
+<summary><b>Personnel Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -142,11 +142,13 @@ graph TB
 | **coaches** | Coaching staff | name, nationality, license_level |
 | **players** | Player profiles | name, position, nationality, squad_number |
 | **team_staff** | Support personnel | role, department, salary |
+| **positions** | Position definitions | position_name, position_code, category |
+| **player_statuses** | Player availability | status_name, description |
 
 </details>
 
 <details>
-<summary><b>⚽ Match Management</b></summary>
+<summary><b>Match Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -160,7 +162,7 @@ graph TB
 </details>
 
 <details>
-<summary><b>📊 Analytics & Performance</b></summary>
+<summary><b>Analytics & Performance</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -170,7 +172,7 @@ graph TB
 </details>
 
 <details>
-<summary><b>💼 Business Management</b></summary>
+<summary><b>Business Management</b></summary>
 
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
@@ -179,7 +181,7 @@ graph TB
 
 </details>
 
-### 🔗 Relationship Highlights
+### Relationship Highlights
 
 <div align="center">
 
@@ -194,7 +196,7 @@ graph TB
 
 ---
 
-## 📊 Database Views
+## Database Views
 
 <div align="center">
 
@@ -206,46 +208,37 @@ graph TB
 <tr>
 <td>
 
-**🏆 League Table**
+**League Table View**
 ```sql
-USE `football_fixtures_db`;
-
-SELECT 
-    t.team_name,
-    ts.matches_played,
-    ts.wins,
-    ts.draws,
-    ts.losses,
-    ts.goals_for,
-    ts.goals_against,
-    ts.goal_difference,
-    ts.points,
-    RANK() OVER (PARTITION BY ts.competition_id ORDER BY ts.points DESC, ts.goal_difference DESC, ts.goals_for DESC) as position
-FROM `team_statistics` ts
-JOIN `teams` t ON ts.team_id = t.team_id
-JOIN `competitions` c ON ts.competition_id = c.competition_id
-WHERE ts.season = '2024-25';
+-- view_match_setup
+SELECT
+    f.fixture_id,
+    f.match_date,
+    f.kick_off_time,
+    c.competition_name,
+    s.stadium_name,
+    CONCAT(r.first_name, ' ', r.last_name) AS referee_name
+FROM fixtures f
+JOIN competitions c ON f.competition_id = c.competition_id
+JOIN stadiums s ON f.stadium_id = s.stadium_id
+LEFT JOIN referees r ON f.referee_id = r.referee_id;
 ```
 
 </td>
 <td>
 
-**⚽ Top Scorers**
+**Player Profiles View**
 ```sql
-USE `football_fixtures_db`;
-
-SELECT 
-    CONCAT(p.first_name, ' ', p.last_name) as player_name,
-    t.team_name,
-    ps.goals_scored,
-    ps.assists,
-    ps.matches_played,
-    ROUND(ps.goals_scored / NULLIF(ps.matches_played, 0), 2) as goals_per_match
-FROM `player_statistics` ps
-JOIN `players` p ON ps.player_id = p.player_id
-JOIN `teams` t ON p.team_id = t.team_id
-WHERE ps.season = '2024-25'
-ORDER BY ps.goals_scored DESC, ps.assists DESC;
+-- view_player_profiles
+SELECT
+    p.player_id,
+    CONCAT(p.first_name, ' ', p.last_name) AS full_name,
+    p.nationality,
+    pos.position_name,
+    s.status_name
+FROM players p
+JOIN positions pos ON p.position_id = pos.position_id
+JOIN player_statuses s ON p.status_id = s.status_id;
 ```
 
 </td>
@@ -253,52 +246,44 @@ ORDER BY ps.goals_scored DESC, ps.assists DESC;
 <tr>
 <td>
 
-**📅 Upcoming Fixtures**
+**Match Events View**
 ```sql
-USE `football_fixtures_db`;
-
-SELECT 
-    f.fixture_id,
-    f.match_date,
-    f.kick_off_time,
-    ht.team_name as home_team,
-    at.team_name as away_team,
-    c.competition_name,
-    s.stadium_name,
-    CONCAT(r.first_name, ' ', r.last_name) as referee_name
-FROM `fixtures` f
-JOIN `teams` ht ON f.home_team_id = ht.team_id
-JOIN `teams` at ON f.away_team_id = at.team_id
-JOIN `competitions` c ON f.competition_id = c.competition_id
-JOIN `stadiums` s ON f.stadium_id = s.stadium_id
-LEFT JOIN `referees` r ON f.referee_id = r.referee_id
-WHERE f.match_date >= CURDATE() AND f.status = 'Scheduled'
-ORDER BY f.match_date, f.kick_off_time;
+-- view_match_events (consolidated)
+SELECT
+    g.goal_id,
+    g.fixture_id,
+    'Goal' AS event_type,
+    g.player_id,
+    g.minute,
+    g.goal_type
+FROM goals g
+UNION ALL
+SELECT
+    c.card_id,
+    c.fixture_id,
+    'Card' AS event_type,
+    c.player_id,
+    c.minute,
+    c.card_type
+FROM cards c;
 ```
 
 </td>
 <td>
 
-**📈 Player Performance**
+**Club Structure View**
 ```sql
-USE `football_fixtures_db`;
-
-SELECT 
-    CONCAT(p.first_name, ' ', p.last_name) as player_name,
+-- view_club_structure
+SELECT
     t.team_name,
-    pos.position_name,
-    ps.matches_played,
-    ps.goals_scored,
-    ps.assists,
-    ps.yellow_cards,
-    ps.red_cards,
-    ROUND(ps.minutes_played / NULLIF(ps.matches_played, 0), 0) as avg_minutes_per_match,
-    ps.pass_accuracy
-FROM `player_statistics` ps
-JOIN `players` p ON ps.player_id = p.player_id
-JOIN `teams` t ON p.team_id = t.team_id
-JOIN `positions` pos ON p.position_id = pos.position_id
-WHERE ps.season = '2024-25' AND ps.matches_played > 0;
+    CONCAT(c.first_name, ' ', c.last_name) AS coach_name,
+    ts.role AS staff_role,
+    pc.weekly_salary,
+    pc.contract_type
+FROM teams t
+LEFT JOIN coaches c ON t.coach_id = c.coach_id
+LEFT JOIN team_staff ts ON t.team_id = ts.team_id
+LEFT JOIN player_contracts pc ON t.team_id = pc.team_id;
 ```
 
 </td>
@@ -307,7 +292,7 @@ WHERE ps.season = '2024-25' AND ps.matches_played > 0;
 
 ---
 
-## ⚙️ Stored Procedures
+## Stored Procedures
 
 <div align="center">
 
@@ -321,82 +306,38 @@ CALL UpdateTeamStatistics(fixture_id);
 ```
 
 **Automated Features:**
-- ✅ Calculates points based on match result
-- ✅ Updates goal difference
-- ✅ Maintains win/draw/loss records
-- ✅ Handles both home and away team statistics
+- Calculates points based on match result
+- Updates goal difference
+- Maintains win/draw/loss records
+- Handles both home and away team statistics
 
 ---
 
-## 💡 Usage Examples
+## Usage Examples
 
-### 🔍 Advanced Query Examples
+### Advanced Query Examples
 
 <details>
-<summary><b>Get next 5 Premier League matches</b></summary>
+<summary><b>Stadium Utilization Analysis</b></summary>
 
 ```sql
 SELECT 
-    f.match_date,
-    f.kick_off_time,
-    ht.team_name AS home_team,
-    at.team_name AS away_team,
-    s.stadium_name
-FROM fixtures f
-JOIN teams ht ON f.home_team_id = ht.team_id
-JOIN teams at ON f.away_team_id = at.team_id
-JOIN competitions c ON f.competition_id = c.competition_id
-JOIN stadiums s ON f.stadium_id = s.stadium_id
-WHERE c.competition_name = 'Premier League'
-  AND f.match_date >= CURDATE()
-  AND f.status = 'Scheduled'
-ORDER BY f.match_date, f.kick_off_time
-LIMIT 5;
+    s.stadium_name,
+    s.capacity,
+    COUNT(f.fixture_id) AS matches_hosted,
+    AVG(f.attendance) AS avg_attendance,
+    ROUND((AVG(f.attendance) / s.capacity) * 100, 1) AS capacity_utilization_percent
+FROM stadiums s
+LEFT JOIN fixtures f ON s.stadium_id = f.stadium_id
+WHERE f.status = 'Finished'
+GROUP BY s.stadium_id, s.stadium_name, s.capacity
+ORDER BY capacity_utilization_percent DESC;
 ```
 
 </details>
 
 <details>
-<summary><b>Player goal statistics analysis</b></summary>
-
-```sql
-SELECT 
-    CONCAT(p.first_name, ' ', p.last_name) AS player_name,
-    t.team_name,
-    COUNT(g.goal_id) AS total_goals,
-    COUNT(CASE WHEN g.goal_type = 'Penalty' THEN 1 END) AS penalties,
-    COUNT(CASE WHEN g.body_part = 'Head' THEN 1 END) AS headers
-FROM players p
-JOIN teams t ON p.team_id = t.team_id
-LEFT JOIN goals g ON p.player_id = g.player_id
-GROUP BY p.player_id, p.first_name, p.last_name, t.team_name
-HAVING total_goals > 0
-ORDER BY total_goals DESC;
-```
-
-</details>
-
-<details>
-<summary><b>Team form analysis</b></summary>
-
-```sql
-SELECT 
-    t.team_name,
-    ts.matches_played,
-    ROUND((ts.wins / ts.matches_played) * 100, 1) AS win_percentage,
-    ts.goals_for,
-    ts.goals_against,
-    ROUND(ts.goals_for / ts.matches_played, 2) AS goals_per_match
-FROM team_statistics ts
-JOIN teams t ON ts.team_id = t.team_id
-WHERE ts.season = '2024-25' AND ts.competition_id = 1
-ORDER BY win_percentage DESC;
-```
-
-</details>
-
-<details>
-<summary><b>Player injury history report</b></summary>
+<summary><b>Player Injury History Report</b></summary>
 
 ```sql
 SELECT 
@@ -417,35 +358,72 @@ ORDER BY mr.injury_date DESC;
 </details>
 
 <details>
-<summary><b>Stadium utilization analysis</b></summary>
+<summary><b>Player Discipline Analysis</b></summary>
 
 ```sql
 SELECT 
-    s.stadium_name,
-    s.capacity,
-    COUNT(f.fixture_id) AS matches_hosted,
-    AVG(f.attendance) AS avg_attendance,
-    ROUND((AVG(f.attendance) / s.capacity) * 100, 1) AS capacity_utilization_percent
-FROM stadiums s
-LEFT JOIN fixtures f ON s.stadium_id = f.stadium_id
-WHERE f.status = 'Finished'
-GROUP BY s.stadium_id, s.stadium_name, s.capacity
-ORDER BY capacity_utilization_percent DESC;
+    CONCAT(p.first_name, ' ', p.last_name) AS player_name,
+    t.team_name,
+    pos.position_name,
+    COUNT(CASE WHEN c.card_type = 'Yellow' THEN 1 END) AS yellow_cards,
+    COUNT(CASE WHEN c.card_type = 'Red' THEN 1 END) AS red_cards,
+    COUNT(c.card_id) AS total_cards,
+    ROUND(AVG(c.minute), 1) AS avg_card_minute,
+    CASE 
+        WHEN COUNT(c.card_id) = 0 THEN 'Disciplined'
+        WHEN COUNT(c.card_id) >= 3 THEN 'Aggressive'
+        ELSE 'Moderate'
+    END AS discipline_rating
+FROM players p
+JOIN teams t ON p.team_id = t.team_id
+JOIN positions pos ON p.position_id = pos.position_id
+LEFT JOIN cards c ON p.player_id = c.player_id
+GROUP BY p.player_id, p.first_name, p.last_name, t.team_name, pos.position_name
+ORDER BY total_cards DESC, yellow_cards DESC;
+```
+
+</details>
+
+<details>
+<summary><b>Performance-Based Salary Updates</b></summary>
+
+```sql
+UPDATE player_contracts pc
+JOIN players p ON pc.player_id = p.player_id
+JOIN player_statistics ps ON p.player_id = ps.player_id
+SET pc.weekly_salary = pc.weekly_salary * 1.15
+WHERE ps.season = '2024-25' 
+  AND ps.competition_id = 1
+  AND (ps.goals_scored >= 5 OR ps.assists >= 4)
+  AND pc.is_active = TRUE;
+```
+
+</details>
+
+<details>
+<summary><b>Medical Records Cleanup</b></summary>
+
+```sql
+DELETE FROM medical_records 
+WHERE is_active = FALSE 
+  AND actual_return_date IS NOT NULL 
+  AND actual_return_date < DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+  AND severity IN ('Minor', 'Moderate');
 ```
 
 </details>
 
 ---
 
-## 🎯 Technical Features
+## Technical Features
 
 <div align="center">
 
 <table>
 <tr>
-<th>🔧 Technical</th>
-<th>📊 Functional</th>
-<th>🔒 Security</th>
+<th>Technical</th>
+<th>Functional</th>
+<th>Security</th>
 </tr>
 <tr>
 <td>
@@ -488,7 +466,7 @@ ORDER BY capacity_utilization_percent DESC;
 
 ---
 
-## 📈 Sample Data Overview
+## Sample Data Overview
 
 <div align="center">
 
@@ -500,8 +478,8 @@ ORDER BY capacity_utilization_percent DESC;
 <tr>
 <td align="center">
 
-**🏟️ Infrastructure**
-- **15** Premier League Stadiums
+**Infrastructure**
+- **20** Premier League Stadiums
 - Capacity & surface details
 - Geographic locations
 - Venue specifications
@@ -509,9 +487,9 @@ ORDER BY capacity_utilization_percent DESC;
 </td>
 <td align="center">
 
-**👨‍💼 Personnel**
-- **15** Professional Coaches
-- **31** Professional Players
+**Personnel**
+- **20** Professional Coaches
+- **60+** Professional Players
 - Qualifications & profiles
 - Career statistics
 
@@ -520,7 +498,7 @@ ORDER BY capacity_utilization_percent DESC;
 <tr>
 <td align="center">
 
-**🏆 Competitions**
+**Competitions**
 - **5** Major Competitions
 - Premier League focus
 - European tournaments
@@ -529,8 +507,8 @@ ORDER BY capacity_utilization_percent DESC;
 </td>
 <td align="center">
 
-**📊 Match Data**
-- **18+** Match Fixtures
+**Match Data**
+- **15+** Match Fixtures
 - Complete statistics
 - Goals, assists, cards
 - Match events timeline
@@ -540,7 +518,7 @@ ORDER BY capacity_utilization_percent DESC;
 <tr>
 <td align="center">
 
-**💼 Business Data**
+**Business Data**
 - Contract information
 - Salary structures
 - Transfer details
@@ -549,7 +527,7 @@ ORDER BY capacity_utilization_percent DESC;
 </td>
 <td align="center">
 
-**🏥 Medical Records**
+**Medical Records**
 - Injury tracking
 - Recovery timelines
 - Treatment notes
@@ -561,7 +539,7 @@ ORDER BY capacity_utilization_percent DESC;
 
 ---
 
-## 🛠️ Customization & Extension
+## Customization & Extension
 
 ### Adding New Competitions
 
@@ -633,7 +611,7 @@ EXPLAIN SELECT * FROM fixtures WHERE match_date >= CURDATE();
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 <div align="center">
 
@@ -645,28 +623,28 @@ EXPLAIN SELECT * FROM fixtures WHERE match_date >= CURDATE();
 <tr>
 <td align="center">
 
-**🐛 Report Issues**
+**Report Issues**
 Found a bug? Let us know!
 Create detailed issue reports
 
 </td>
 <td align="center">
 
-**💡 Suggest Features**
+**Suggest Features**
 Have ideas for improvements?
 Share your enhancement proposals
 
 </td>
 <td align="center">
 
-**📝 Improve Documentation**
+**Improve Documentation**
 Help make our docs better
 Add examples and tutorials
 
 </td>
 <td align="center">
 
-**🔧 Submit Code**
+**Submit Code**
 Fork, develop, and create PRs
 Follow coding standards
 
@@ -708,11 +686,11 @@ git push origin feature/amazing-feature
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 <div align="center">
 
-**Built with ❤️ for the football community**
+**Built with care for the football community**
 
 </div>
 
@@ -720,28 +698,28 @@ git push origin feature/amazing-feature
 <tr>
 <td align="center">
 
-**🛢️ MySQL Team**
+**MySQL Team**
 For the robust database engine
 and excellent documentation
 
 </td>
 <td align="center">
 
-**⚽ Football Community**
+**Football Community**
 For inspiration, requirements,
 and real-world use cases
 
 </td>
 <td align="center">
 
-**👥 Contributors**
+**Contributors**
 Everyone who helped improve
 this project with code and ideas
 
 </td>
 <td align="center">
 
-**🌐 Open Source**
+**Open Source**
 Standing on the shoulders of giants
 in the open source ecosystem
 
@@ -757,5 +735,5 @@ in the open source ecosystem
 
 <div align="center">
 
-**⭐ Star this repository if you find it useful!**
+**Star this repository if you find it useful!**
 </div>
