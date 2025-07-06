@@ -60,7 +60,7 @@ CREATE TABLE `teams` (
     `team_id` INT AUTO_INCREMENT PRIMARY KEY,
     `team_name` VARCHAR(100) NOT NULL,
     `short_name` VARCHAR(10),
-    `founded_year` YEAR,
+    `founded_year` SMALLINT UNSIGNED,
     `coach_id` INT,
     `home_stadium_id` INT,
     `primary_color` VARCHAR(20),
