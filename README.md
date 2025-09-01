@@ -676,16 +676,6 @@ git commit -m "feat: add player transfer tracking functionality"
 git push origin feature/amazing-feature
 ```
 
-### Code Standards
-
-- **SQL Style**: Use uppercase for keywords, lowercase for identifiers
-- **Naming**: Use descriptive names with consistent conventions
-- **Comments**: Document complex queries and business logic
-- **Testing**: Include test data and validation queries
-- **Documentation**: Update README for new features
-
----
-
 ## Acknowledgments
 
 <div align="center">
