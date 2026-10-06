@@ -727,3 +727,8 @@ in the open source ecosystem
 
 **Star this repository if you find it useful!**
 </div>
+
+
+## Author and portfolio
+
+Created by **Mohamed Aiman (Darkguyaiman)**. Explore more projects and get in touch at **[darkguyaiman.com](https://darkguyaiman.com/)**.
